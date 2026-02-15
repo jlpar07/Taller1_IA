@@ -29,7 +29,24 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     # TODO: Add your code here
-    utils.raiseNotDefined()
+    pila = utils.Stack()
+    inicio = problem.getStartState()
+    pila.push(inicio)
+    visitados = set()
+    acciones = []
+    
+    while not pila.isEmpty():
+        nodo = pila.pop()
+        if problem.isGoalState(nodo):
+            return acciones
+        if nodo in visitados:
+            continue
+        visitados.add(nodo)
+        for hijo in problem.getSuccessors(nodo):   #toca agregarle las restricciones de movimiento al parecer, en algunos casos tira excepción de movimiento ilegal
+            pila.push(hijo[0])  #hijo[0] es el estado sucesor, hijo[1] es la acción, hijo[2] es el costo
+            acciones.append(hijo[1])
+    
+    return acciones
 
 
 def breadthFirstSearch(problem: SearchProblem):
