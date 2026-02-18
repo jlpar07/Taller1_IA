@@ -1,3 +1,4 @@
+from numpy import inf
 from algorithms.problems import SearchProblem
 import algorithms.utils as utils
 from world.game import Directions
@@ -47,6 +48,7 @@ def depthFirstSearch(problem: SearchProblem):
             acciones.append(hijo[1])
     
     return acciones
+   
 
 
 def breadthFirstSearch(problem: SearchProblem):
@@ -63,7 +65,47 @@ def uniformCostSearch(problem: SearchProblem):
     """
 
     # TODO: Add your code here
+    frontier = utils.Stack()
+    inicio = problem.getStartState()
+    frontier.push(inicio)
+    reached = set()
+    acciones = []
+    if inicio == problem.isGoalState():
+        return acciones
+    while not frontier.isEmpty():
+        nodo = frontier.pop()
+        costoMin = inf
+        
+        for child in problem.getSuccessors(nodo):
+            state = child[0]
+            ##frontier.push(child[0])
+            if problem.isGoalState(state):
+                return child
+            if child[0] in acciones:
+                acciones.append(state)
+                frontier.push(child)
+    acciones[0] = -1
+    return acciones
+
+
+
+
+
+
+
+
+
+
+    node = problem.getStartState()
+    if node == problem.isGoalState(node):
+        return []
+    priorityQueue = utils.PriorityQueue()
+    frontier = utils.PriorityQueue()
+    funcPriotyGueue = utils.PriorityQueueWithFunction(lambda n: problem.getCostOfActions(n[1]) + heuristic(n[0], problem))
+
+
     utils.raiseNotDefined()
+
 
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
