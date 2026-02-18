@@ -77,15 +77,22 @@ def uniformCostSearch(problem: SearchProblem):
     while not frontier.isEmpty():
         nodo = frontier.pop()
         costoMin = inf
+        costoMinNodo = None
+        costoMinState = None
         
         for child in problem.getSuccessors(nodo):
+            
             state = child[0]
-            ##frontier.push(child[0])
+            
             if problem.isGoalState(state):
                 return child
-            if child[0] in acciones:
-                acciones.append(state)
-                frontier.push(child)
+            if (child[2] < costoMin):## and (state not in reached):
+                   costoMin = child[2]
+                   costoMinNodo = child
+                   costoMinState = state
+        if costoMinState in acciones:
+            acciones.append(costoMinState)
+            frontier.push(costoMinNodo)
     acciones[0] = -1
     return acciones
 
