@@ -1,4 +1,5 @@
 from numpy import inf
+from world.rescue_state import RescueState
 from algorithms.problems import SearchProblem
 import algorithms.utils as utils
 from world.game import Directions
@@ -35,6 +36,7 @@ def depthFirstSearch(problem: SearchProblem):
     pila.push(inicio)
     visitados = set()
     acciones = []
+    #acciones.append(inicio[1])
     
     while not pila.isEmpty():
         nodo = pila.pop()
@@ -44,11 +46,11 @@ def depthFirstSearch(problem: SearchProblem):
             continue
         visitados.add(nodo)
         for hijo in problem.getSuccessors(nodo):   #toca agregarle las restricciones de movimiento al parecer, en algunos casos tira excepción de movimiento ilegal
-            pila.push(hijo[0])  #hijo[0] es el estado sucesor, hijo[1] es la acción, hijo[2] es el costo
-            acciones.append(hijo[1])
+            #if RescueState.getLegalActions(hijo[0]).count(hijo[1]) > 0: #se verifica que la acción sea legal para el estado actual
+                pila.push(hijo[0])  #hijo[0] es el estado sucesor, hijo[1] es la acción, hijo[2] es el costo
+                acciones.append(hijo[1])
     
-    return acciones
-   
+    return None
 
 
 def breadthFirstSearch(problem: SearchProblem):
@@ -113,7 +115,28 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     Search the node that has the lowest combined cost and heuristic first.
     """
     # TODO: Add your code here
-    utils.raiseNotDefined()
+    inicio = problem.getStartState()
+    novisitados = utils.PriorityQueue()
+    novisitados.push(inicio, heuristic(inicio, problem))
+    visitados = set()
+    while novisitados:
+        nodo = novisitados.pop()  #nodo es el estado actual
+        if problem.isGoalState(nodo):
+            return nodo
+        visitados.add(nodo)
+        for vecino in problem.getSuccessors(nodo):
+            if vecino in visitados:
+                continue
+            costo = nodo[2] + heuristic(vecino,problem)  # nodo[2] es el costo del movimiento
+            if vecino not in novisitados:
+                novisitados.push(vecino,costo)
+            #elif costo < novisitados.getPriority(vecino[0]): #si el costo es menor que el costo actual en la cola de prioridad, se actualiza el costo
+                #visitados.update(vecino, costo)
+    return None
+            
+        
+        
+        
 
 
 # Abbreviations (you can use them for the -f option in main.py)
