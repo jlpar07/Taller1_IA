@@ -44,6 +44,12 @@ class SearchProblem:
         The sequence must be composed of legal moves.
         """
         utils.raiseNotDefined()
+    
+    def getCostOfState(self, state):
+        """
+        Returns the cost of a particular state.
+        """
+        utils.raiseNotDefined()
 
 
 class SimpleSurvivorProblem(SearchProblem):
@@ -184,6 +190,12 @@ class SimpleSurvivorProblem(SearchProblem):
                 return 999999
             cost += self.costFn((x, y))
         return cost
+    
+    def getCostOfState(self, state):
+        """
+        Returns the cost of a particular state.
+        """
+        return self.costFn(state)
 
 
 class MultiSurvivorProblem(SearchProblem):

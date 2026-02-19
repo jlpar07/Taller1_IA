@@ -17,9 +17,10 @@ def manhattanHeuristic(state, problem):
     The Manhattan distance heuristic.
     """
     # TODO: Add your code here
-    inicio = problem.getStartState()   # mmm no lo sé
-    distancia = abs((state[0][0]-inicio[0][0]) + (state[0][1]-inicio[0][1]))
-    ##no sé si haya que poner algo más
+    
+    x1, y1 = state
+    x2, y2 = problem.goal
+    distancia = abs(x1 - x2) + abs(y1 - y2)
     return distancia
 
 
@@ -29,9 +30,9 @@ def euclideanHeuristic(state, problem):
     The Euclidean distance heuristic.
     """
     # TODO: Add your code here
-    inicio = problem.getStartState()   # mmm no lo sé
-    distancia = ((state[0][0]-inicio[0][0])**2 + (state[0][1]-inicio[0][1])**2)**0.5  
-    ##no sé si haya que poner algo más
+    x1, y1 = state
+    x2, y2 = problem.goal
+    distancia = ((x1-x2)**2 + (y1-y2)**2)**0.5  
     return distancia
 
 

@@ -1,6 +1,6 @@
 from numpy import inf
 from world.rescue_state import RescueState
-from algorithms.problems import SearchProblem
+from algorithms.problems import SimpleSurvivorProblem, SearchProblem
 import algorithms.utils as utils
 from world.game import Directions
 from algorithms.heuristics import nullHeuristic
@@ -109,48 +109,50 @@ def uniformCostSearch(problem: SearchProblem):
 
 
 
-
-
-
-
-
-
-
-    node = problem.getStartState()
-    if node == problem.isGoalState(node):
-        return []
-    priorityQueue = utils.PriorityQueue()
-    frontier = utils.PriorityQueue()
-    funcPriotyGueue = utils.PriorityQueueWithFunction(lambda n: problem.getCostOfActions(n[1]) + heuristic(n[0], problem))
-
-
-    utils.raiseNotDefined()
-
-
-
-def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
+def aStarSearch(problem: SearchProblem, heuristic):
     """
     Search the node that has the lowest combined cost and heuristic first.
     """
     # TODO: Add your code here
     inicio = problem.getStartState()
-    novisitados = utils.PriorityQueue()
-    novisitados.push(inicio, heuristic(inicio, problem))
-    visitados = set()
-    while novisitados:
-        nodo = novisitados.pop()  #nodo es el estado actual
-        if problem.isGoalState(nodo):
-            return nodo
-        visitados.add(nodo)
-        for vecino in problem.getSuccessors(nodo):
-            if vecino in visitados:
-                continue
-            costo = nodo[2] + heuristic(vecino,problem)  # nodo[2] es el costo del movimiento
-            if vecino not in novisitados:
-                novisitados.push(vecino,costo)
-            #elif costo < novisitados.getPriority(vecino[0]): #si el costo es menor que el costo actual en la cola de prioridad, se actualiza el costo
-                #visitados.update(vecino, costo)
+
+    
+    acciones = []
+    if problem.isGoalState(inicio):
+        return acciones
+    frontier = utils.PriorityQueue()
+    bestCost = {inicio:0}
+    costoAcumulado = 0
+
+    prioridad_inicial = costoAcumulado + heuristic(inicio, problem)
+    frontier.push((inicio,acciones, costoAcumulado), prioridad_inicial)
+
+
+
+    while not frontier.isEmpty():
+
+        (state, path, cost) = frontier.pop()
+
+        if problem.isGoalState(state):
+           return path
+        
+        if cost > bestCost[state]:
+            continue
+
+        
+        for (succState, action, stepCost) in problem.getSuccessors(state):
+            
+            newCost = cost + stepCost
+            newPath = path + [action]
+            if succState not in bestCost or newCost < bestCost[succState]:
+                bestCost[succState] = newCost
+                f_cost = newCost + heuristic(succState, problem)
+                frontier.push((succState, newPath,newCost), priority=f_cost)
+
+                
+        
     return None
+
             
         
         
