@@ -67,34 +67,45 @@ def uniformCostSearch(problem: SearchProblem):
     """
 
     # TODO: Add your code here
-    frontier = utils.Stack()
     inicio = problem.getStartState()
-    frontier.push(inicio)
-    reached = set()
+
+    
     acciones = []
-    if inicio == problem.isGoalState():
-        return acciones
+    if problem.isGoalState(inicio):
+        return None
+    frontier = utils.PriorityQueue()
+
+    reached = set()
+    reached.add(inicio)
+    costoAcumulado = 0
+    frontier.push((inicio,acciones, costoAcumulado),0)
+
+    bestCost = {inicio:0}
+
+
+
     while not frontier.isEmpty():
-        nodo = frontier.pop()
-        costoMin = inf
-        costoMinNodo = None
-        costoMinState = None
+
+        (state, path, cost) = frontier.pop()
+
+        if problem.isGoalState(state):
+           return path
         
-        for child in problem.getSuccessors(nodo):
+        if cost > bestCost[state]:
+            continue
+
+        
+        for (succState, action, stepCost) in problem.getSuccessors(state):
             
-            state = child[0]
-            
-            if problem.isGoalState(state):
-                return child
-            if (child[2] < costoMin):## and (state not in reached):
-                   costoMin = child[2]
-                   costoMinNodo = child
-                   costoMinState = state
-        if costoMinState in acciones:
-            acciones.append(costoMinState)
-            frontier.push(costoMinNodo)
-    acciones[0] = -1
-    return acciones
+            newCost = cost + stepCost
+            newPath = path + [action]
+            if succState not in bestCost or newCost < bestCost[succState]:
+                bestCost[succState] = newCost
+                frontier.push((succState, newPath,newCost), priority=newCost)
+
+                
+        
+    return None
 
 
 
