@@ -52,4 +52,6 @@ def survivorHeuristic(state: Tuple[Tuple, Any], problem: MultiSurvivorProblem):
     - Balance heuristic strength vs. computation time (do experiments!)
     """
     # TODO: Add your code here
-    utils.raiseNotDefined()
+
+    return 0
+

@@ -1,6 +1,6 @@
 from numpy import inf
 from world.rescue_state import RescueState
-from algorithms.problems import SimpleSurvivorProblem, SearchProblem
+from algorithms.problems import SearchProblem
 import algorithms.utils as utils
 from world.game import Directions
 from algorithms.heuristics import nullHeuristic
@@ -82,8 +82,6 @@ def uniformCostSearch(problem: SearchProblem):
 
     bestCost = {inicio:0}
 
-
-
     while not frontier.isEmpty():
 
         (state, path, cost) = frontier.pop()
@@ -102,10 +100,10 @@ def uniformCostSearch(problem: SearchProblem):
             if succState not in bestCost or newCost < bestCost[succState]:
                 bestCost[succState] = newCost
                 frontier.push((succState, newPath,newCost), priority=newCost)
-
-                
         
     return None
+
+
 
 
 
@@ -115,19 +113,44 @@ def aStarSearch(problem: SearchProblem, heuristic):
     """
     # TODO: Add your code here
     inicio = problem.getStartState()
+    novisitados = utils.PriorityQueue()
+    novisitados.push(inicio, heuristic(inicio, problem))
+    visitados = set()
+    while novisitados:
+        nodo = novisitados.pop()  #nodo es el estado actual
+        if problem.isGoalState(nodo):
+            return nodo
+        visitados.add(nodo)
+        for vecino in problem.getSuccessors(nodo):
+            if vecino in visitados:
+                continue
+            costo = nodo[2] + heuristic(vecino,problem)  # nodo[2] es el costo del movimiento
+            if vecino not in novisitados:
+                novisitados.push(vecino,costo)
+            #elif costo < novisitados.getPriority(vecino[0]): #si el costo es menor que el costo actual en la cola de prioridad, se actualiza el costo
+                #visitados.update(vecino, costo)
+    return None
+
+def aStar(problem: SearchProblem, heuristic):
+    """
+    Search the node of least total cost first.
+    """
+
+    # TODO: Add your code here
+    inicio = problem.getStartState()
 
     
     acciones = []
     if problem.isGoalState(inicio):
-        return acciones
+        return None
     frontier = utils.PriorityQueue()
-    bestCost = {inicio:0}
+
+    reached = set()
+    reached.add(inicio)
     costoAcumulado = 0
+    frontier.push((inicio,acciones, costoAcumulado),0)
 
-    prioridad_inicial = costoAcumulado + heuristic(inicio, problem)
-    frontier.push((inicio,acciones, costoAcumulado), prioridad_inicial)
-
-
+    bestCost = {inicio:0}
 
     while not frontier.isEmpty():
 
@@ -146,13 +169,11 @@ def aStarSearch(problem: SearchProblem, heuristic):
             newPath = path + [action]
             if succState not in bestCost or newCost < bestCost[succState]:
                 bestCost[succState] = newCost
-                f_cost = newCost + heuristic(succState, problem)
-                frontier.push((succState, newPath,newCost), priority=f_cost)
-
-                
+                costHeuristic = heuristic(succState, problem)
+                priorityFunc = newCost + costHeuristic
+                frontier.push((succState, newPath,newCost), priorityFunc)
         
     return None
-
             
         
         
@@ -164,3 +185,4 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+aStar2 = aStar
