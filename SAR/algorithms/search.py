@@ -52,8 +52,24 @@ def breadthFirstSearch(problem: SearchProblem):
     """
     Search the shallowest nodes in the search tree first.
     """
-    # TODO: Add your code here
-    utils.raiseNotDefined()
+    cola = utils.Queue()   # en BFS usamos cola en vez de pila
+    acciones = []
+    cola.push((problem.getStartState(), acciones))
+    visitados = set()
+
+    while not cola.isEmpty():
+        estado, acciones = cola.pop()
+
+        if problem.isGoalState(estado):
+            return acciones
+
+        if estado not in visitados:
+            visitados.add(estado)
+            for hijo in problem.getSuccessors(estado):
+                nuevo_camino = acciones + [hijo[1]]  # hijo[1] es la accion
+                cola.push((hijo[0], nuevo_camino))   # hijo[0] estado sucesor
+
+    return None
 
 
 def uniformCostSearch(problem: SearchProblem):
