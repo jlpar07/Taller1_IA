@@ -32,24 +32,19 @@ def depthFirstSearch(problem: SearchProblem):
     """
     # TODO: Add your code here
     pila = utils.Stack()
-    inicio = problem.getStartState()
-    pila.push(inicio)
-    visitados = set()
     acciones = []
-    #acciones.append(inicio[1])
+    pila.push((problem.getStartState(), acciones))
+    visitados = set()
     
     while not pila.isEmpty():
-        nodo = pila.pop()
-        if problem.isGoalState(nodo):
+        estado, acciones = pila.pop()
+        if problem.isGoalState(estado):
             return acciones
-        if nodo in visitados:
-            continue
-        visitados.add(nodo)
-        for hijo in problem.getSuccessors(nodo):   #toca agregarle las restricciones de movimiento al parecer, en algunos casos tira excepción de movimiento ilegal
-            #if RescueState.getLegalActions(hijo[0]).count(hijo[1]) > 0: #se verifica que la acción sea legal para el estado actual
-                pila.push(hijo[0])  #hijo[0] es el estado sucesor, hijo[1] es la acción, hijo[2] es el costo
-                acciones.append(hijo[1])
-    
+        if estado not in visitados:
+            visitados.add(estado)
+            for hijo in problem.getSuccessors(estado): 
+                nuevo_camino = acciones + [hijo[1]]  #hijo[1] es la acción
+                pila.push((hijo[0], nuevo_camino))   #hijo[0] es el estado sucesor, hijo[1] es la acción, hijo[2] es el costo
     return None
 
 
