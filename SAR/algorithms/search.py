@@ -98,35 +98,7 @@ def uniformCostSearch(problem: SearchProblem):
         
     return None
 
-
-
-
-
 def aStarSearch(problem: SearchProblem, heuristic):
-    """
-    Search the node that has the lowest combined cost and heuristic first.
-    """
-    # TODO: Add your code here
-    inicio = problem.getStartState()
-    novisitados = utils.PriorityQueue()
-    novisitados.push(inicio, heuristic(inicio, problem))
-    visitados = set()
-    while novisitados:
-        nodo = novisitados.pop()  #nodo es el estado actual
-        if problem.isGoalState(nodo):
-            return nodo
-        visitados.add(nodo)
-        for vecino in problem.getSuccessors(nodo):
-            if vecino in visitados:
-                continue
-            costo = nodo[2] + heuristic(vecino,problem)  # nodo[2] es el costo del movimiento
-            if vecino not in novisitados:
-                novisitados.push(vecino,costo)
-            #elif costo < novisitados.getPriority(vecino[0]): #si el costo es menor que el costo actual en la cola de prioridad, se actualiza el costo
-                #visitados.update(vecino, costo)
-    return None
-
-def aStar(problem: SearchProblem, heuristic):
     """
     Search the node of least total cost first.
     """
@@ -180,4 +152,3 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
-aStar2 = aStar
