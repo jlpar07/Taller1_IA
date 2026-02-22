@@ -176,7 +176,7 @@ def aStar(problem: SearchProblem, heuristic=nullHeuristic):
             newPath = path + [action]
             if succState not in bestCost or newCost < bestCost[succState]:
                 bestCost[succState] = newCost
-                costHeuristic = 2*heuristic(succState, problem)
+                costHeuristic = 1.2*heuristic(succState, problem)
                 priorityFunc = newCost + costHeuristic
                 frontier.push((succState, newPath,newCost), priorityFunc)
         
@@ -192,3 +192,4 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+aStar2 = aStar

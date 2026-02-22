@@ -55,25 +55,22 @@ def survivorHeuristic(state: Tuple[Tuple, Any], problem: MultiSurvivorProblem):
     position, survivors_grid = state
     
     survivors = survivors_grid.asList()
+
+
     
     if not survivors:
         return 0
     
-   
-    minDist = min(
-        abs(position[0] - sx) + abs(position[1] - sy)
-        for (sx, sy) in survivors
-    )
-    
-    
+    minDist = 10000000    
     maxDist = 0
-    for i in range(len(survivors)):
-        x1, y1 = survivors[i]
-        for j in range(i+1, len(survivors)):
-            x2, y2 = survivors[j]
-            dist = abs(x1 - x2) + abs(y1 - y2)
-            if dist > maxDist:
-                maxDist = dist
+    for survivor in survivors:
+        
+        x1, y1 = position
+        x2, y2 = survivor
+        distancia = ((x1-x2)**2 + (y1-y2)**2)**0.5
+        maxDist +=  distancia
+        minDist = min(distancia,minDist)
+    
     
     return minDist + maxDist
 
