@@ -59,13 +59,13 @@ def survivorHeuristic(state: Tuple[Tuple, Any], problem: MultiSurvivorProblem):
     if not survivors:
         return 0
     
-    # 🔹 Distancia al sobreviviente más cercano
+   
     minDist = min(
         abs(position[0] - sx) + abs(position[1] - sy)
         for (sx, sy) in survivors
     )
     
-    # 🔹 Distancia máxima entre sobrevivientes
+    
     maxDist = 0
     for i in range(len(survivors)):
         x1, y1 = survivors[i]
