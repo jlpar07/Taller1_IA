@@ -131,7 +131,7 @@ def aStarSearch(problem: SearchProblem, heuristic):
                 #visitados.update(vecino, costo)
     return None
 
-def aStar(problem: SearchProblem, heuristic):
+def aStar(problem: SearchProblem, heuristic=nullHeuristic):
     """
     Search the node of least total cost first.
     """
@@ -169,7 +169,7 @@ def aStar(problem: SearchProblem, heuristic):
             newPath = path + [action]
             if succState not in bestCost or newCost < bestCost[succState]:
                 bestCost[succState] = newCost
-                costHeuristic = heuristic(succState, problem)
+                costHeuristic = 2*heuristic(succState, problem)
                 priorityFunc = newCost + costHeuristic
                 frontier.push((succState, newPath,newCost), priorityFunc)
         
